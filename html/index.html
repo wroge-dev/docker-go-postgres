@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+var namesStack = [];
+function showName() {
+  id = Math.floor(Math.random()*(namesStack.length-1+1));
+  alert(namesStack[id]);
+}
+$(document).ready(function(){
+  $("button").click(function(){
+    if (namesStack.length < 1) {
+      $.get("/names", function(names, status) {
+        if (status === "success") {
+          var json = JSON.parse(names);
+          var namesArray = json.Names;
+          for (i = 0; i < namesArray.length; i++) {
+            namesStack.push(namesArray[i].Name);
+          }
+          showName();
+        }
+      }).fail(function() {
+        alert('UPPS');
+      });
+    } else {
+      showName();
+    }
+  }); 
+});
+</script>
+</head>
+<body>
+<button>Click!!</button>
+</body>
+</html>
